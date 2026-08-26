@@ -72,13 +72,9 @@ Pegar el código anterior dentro del archivo, guardar (`Ctrl + O`, presionar `En
 Compilar  el archivo `.c` usando **GCC**:
 
 ```bash
-gcc -Wall -O0 practica2_asm.c -o practica2_asm
+gcc practica_asm.c -o practica_asm
 
 ```
-
-* `-Wall`: Muestra todas las advertencias (warnings).
-* `-O0`: Desactiva las optimizaciones del compilador para asegurar que el código ensamblador se ejecute exactamente como se escribió.
-* `-o practica2_asm`: Especifica el nombre del ejecutable generado.
 
 ## 5. Ejecución del Programa
 
@@ -100,6 +96,7 @@ arreglo[3] = 40
 arreglo[4] = 50
 
 ```
+![alt text](image.png)
 
 ## 6. Análisis e Inspección del Ensamblador Generado
 
@@ -117,3 +114,13 @@ cat practica2_asm.s
 
 Esto permite analizar la interacción directa entre C, las instrucciones ensamblador (`movl`, `addl`, `imull`, `cmpl`, `jge`) y los registros x86_64 (`%eax`, `%ecx`, `%rcx`).
 """
+
+![alt text](image-1.png)
+
+![alt text](image-2.png)
+
+![alt text](image-3.png)
+
+![alt text](image-4.png)
+
+![alt text](image-5.png)
