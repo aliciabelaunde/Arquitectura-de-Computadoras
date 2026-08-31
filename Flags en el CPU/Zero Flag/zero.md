@@ -75,3 +75,4 @@ Ejecutar el programa compilado desde la terminal:
 50 - 20 = 30 | Zero Flag activa: NO
 
 ```
+![alt text](image.png)
