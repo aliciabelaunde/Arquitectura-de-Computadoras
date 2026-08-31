@@ -1,6 +1,6 @@
 # Ejercicio 1
 
-## 1. Código Fuente en C (`carry.c`)
+## 1. Código Fuente en C (`Ejercicio1.c`)
 
 ```c
 
@@ -62,5 +62,7 @@ Ejecutar el programa compilado desde la terminal:
 ### Salida esperada en la terminal:
 
 ```text
-
+La suma del arreglo es: 150
 ```
+
+![alt text](image.png)
