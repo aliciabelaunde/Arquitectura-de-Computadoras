@@ -11,9 +11,9 @@ bool sumar_uint8_con_carry(uint8_t a, uint8_t b, uint8_t *resultado) {
     unsigned char carry_flag;
 
     __asm__ (
-        "addb %  [val_b], %  [val_a]\n\t" // Suma de 8 bits (byte)
-        "setc %[cf]\n\t"                  // cf = 1 si CF == 1
-        : [val_a] "+q" (a),                // Entrada/Salida (registro de 8 bits)
+        "addb %[val_b], %[val_a]\n\t" // Suma de 8 bits (byte)
+        "setc %[cf]\n\t"              // cf = 1 si CF == 1
+        : [val_a] "+q" (a),            // Entrada/Salida (registro de 8 bits)
           [cf] "=q" (carry_flag)
         : [val_b] "q" (b)
         : "cc"
@@ -75,3 +75,4 @@ Ejecutar el programa compilado desde la terminal:
 200 + 50 = 250 | Carry Flag: NO
 200 + 60 = 4 | Carry Flag: SI (Acarreo)
 ```
+![alt text](image.png)
