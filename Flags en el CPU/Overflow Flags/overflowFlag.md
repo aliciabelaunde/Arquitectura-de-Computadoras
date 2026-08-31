@@ -1,6 +1,6 @@
 # OVERFLOW FLAGS
 
-## 1. Código Fuente en C (`overflow.c`)
+## 1. Código Fuente en C (`overflowFlag.c`)
 
 ```c
 #include <stdio.h>
@@ -43,7 +43,7 @@ int main() {
 Usar cualquier editor de texto por terminal como `nano` o `gedit`:
 
 ```bash
-nano overflow.c
+nano overflowFlag.c
 
 ```
 
@@ -55,7 +55,7 @@ Pegar el código anterior dentro del archivo, guardar (`Ctrl + O`, presionar `En
 Compilar  el archivo `.c` usando **GCC**:
 
 ```bash
-gcc overflow.c -o overflow
+gcc overflowFlag.c -o overflowFlag
 
 ```
 
@@ -64,7 +64,7 @@ gcc overflow.c -o overflow
 Ejecutar el programa compilado desde la terminal:
 
 ```bash
-./overflow
+./overflowFlag
 
 ```
 
@@ -74,3 +74,4 @@ Ejecutar el programa compilado desde la terminal:
 100 + 20 = 120 | Overflow Flag: NO
 100 + 30 = -126 | Overflow Flag: SI (Error de signo)
 ```
+![alt text](image.png)
