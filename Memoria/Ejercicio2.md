@@ -1,4 +1,4 @@
-# Ejercicio 1
+# Ejercicio 2
 
 ## 1. Código Fuente en C (`Ejercicio2.c`)
 
