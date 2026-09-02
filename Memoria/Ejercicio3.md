@@ -141,3 +141,5 @@ Ultimos 5 elementos:  596 597 598 599 600
 [EXITO] Los indices 500 al 599 del arreglo original se limpiaron correctamente (todos son 0).
 
 ```
+
+![alt text](image-2.png)
