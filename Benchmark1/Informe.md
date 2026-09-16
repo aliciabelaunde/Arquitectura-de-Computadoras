@@ -30,6 +30,10 @@ Since the cache line size is 64 bytes and each single-precision float occupies 4
 
 * Create the file `benchmark_arquitectura.c` in the Linux working directory and paste the complete source code provided in the guide.
 
+```
+nano benchmar_arquitectura.c
+```
+
 ```c
 #define _POSIX_C_SOURCE 199309L
 #include <stdio.h>
@@ -149,20 +153,30 @@ int main(void) {
 
 * Compile the C code using the strict `-O1` flag to prevent compiler-driven loop reordering while maintaining deterministic measurements:
 ```
-gcc -Wall -Wextra -O1 benchmark_arquitectura.c -o benchmark_arquitectura -lm
+gcc -Wall -Wextra -O1 benchmar_arquitectura.c -o benchmar_arquitectura -lm
 ```
-
-
 
 ### Phase 3: Execution and Performance Profiling
 
-* Execute the compiled binary (`./benchmark_arquitectura`) to obtain execution times, GFLOPS, and Speedup metrics.
+* Execute the compiled binary 
+
+```
+./benchmar_arquitectura
+```
+to obtain execution times, GFLOPS, and Speedup metrics.
 
 
-* Install the `perf` profiling tool if not already present (`sudo apt-get install -y linux-tools-generic linux-tools-common`).
+* Install the `perf` profiling tool if not already present 
+```
+sudo apt-get install -y linux-tools-generic linux-tools-common
+```
 
 
-* Profile hardware-level performance counters using `perf stat -e L1-dcache-loads,L1-dcache-load-misses,cycles,instructions ./benchmark_arquitectura` to evaluate L1 cache miss rates and Instructions Per Cycle (IPC).
+* Profile hardware-level performance counters using 
+```
+perf stat -e L1-dcache-loads,L1-dcache-load-misses,cycles,instructions ./benchmar_arquitectura
+```
+to evaluate L1 cache miss rates and Instructions Per Cycle (IPC).
 
 
 
