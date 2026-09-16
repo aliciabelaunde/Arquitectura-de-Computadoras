@@ -176,6 +176,7 @@ If `perf` fails with a security restriction error (`perf_event_paranoid` set to 
 sudo sysctl -w kernel.perf_event_paranoid=-1
 
 ```
+![alt text](image-7.png)
 
 3. **Profile Performance Counters**
 Run `perf stat` with administrative privileges to record L1 cache loads, cache misses, cycles, and total instructions:
@@ -184,6 +185,7 @@ Run `perf stat` with administrative privileges to record L1 cache loads, cache m
 sudo perf stat -e L1-dcache-loads,L1-dcache-load-misses,cycles,instructions ./benchmar_arquitectura
 
 ```
+![alt text](image-8.png)
 
 4. **Alternative Software Cache Profiling (VirtualBox Fallback)**
 If hardware counters display `<not supported>` due to virtual machine hypervisor limitations, run Valgrind Cachegrind to simulate cache misses in software:
@@ -193,30 +195,27 @@ sudo apt-get install -y valgrind
 valgrind --tool=cachegrind ./benchmar_arquitectura
 
 ```
+![alt text](image-9.png)
+
+Here is the updated **Phase 4** section populated with your empirical benchmark and Cachegrind profiling data, ready for your report:
 
 ## Phase 4: Data Tabulation and Report Generation
 
-* Populate the performance template using empirical data gathered during execution:
-
-
+1. **Populate the performance template using empirical data gathered during execution:**
 
 | Phase / Configuration | Execution Time (s) | Performance (GFLOPS) | Speedup Factor | Cache Hit Rate |
 | --- | --- | --- | --- | --- |
-| **1. Naive (i-j-k)** | *[Measured]* | *[Calculated]* | 1.00x (Baseline) | Low (< 15%)
+| **1. Naive (i-j-k)** | 141.74 s | 0.02 GFLOPS | 1.00x (Baseline) | Low (D1 Read Miss: 14.9%) |
+| **2. Spatial Locality (i-k-j)** | 56.67 s | 0.04 GFLOPS | 2.50x | High (D1 Overall Hit Rate: ~89.2%) |
+| **3. CPU Registers Utilization** | 53.30 s | 0.04 GFLOPS | 2.66x | Optimal (FPU Register Retention) |
+| **4. Loop Unrolling 4x (ILP)** | 39.42 s | 0.05 GFLOPS | 3.60x | Maximum (Pipeline Saturation) |
 
- |
-| **2. Spatial Locality (i-k-j)** | *[Measured]* | *[Calculated]* | *[Calculated]* | High (> 90%)
+2. **Write rigorous technical responses for all four questionnaire items regarding cache line utilization, register retention, instruction-level parallelism, and checksum validation:**
 
- |
-| **3. CPU Registers Utilization** | *[Measured]* | *[Calculated]* | *[Calculated]* | Optimal
-
- |
-| **4. Loop Unrolling 4x (ILP)** | *[Measured]* | *[Calculated]* | *[Calculated]* | Maximum
-
- |
-
-* Write rigorous technical responses for all four questionnaire items regarding cache line utilization, register retention, instruction-level parallelism, and checksum validation.
+* **Cache Line Utilization:** The 64-byte L1 cache line holds 16 single-precision floats. The naive $i\text{-}j\text{-}k$ algorithm accesses Matrix $B$ along columns with a stride of $1024 \times 4\text{ bytes} = 4096\text{ bytes}$, invalidating $93.75\%$ of each fetched cache line and causing high read miss rates ($14.9\%$). Reordering loops to $i\text{-}k\text{-}j$ restores contiguous unit-stride access across rows, retrieving 16 usable floats per cache miss and dropping execution time from 141.74 s to 56.67 s ($2.50\times$ speedup).
+* **Register Retention:** Hoisting the scalar value $A[i][k]$ into a dedicated FPU register (`reg_a`) avoids repeated memory lookups across the innermost loop. Coupled with explicit pointer arithmetic (`ptr_c`, `ptr_b`), this keeps critical operands in high-speed CPU registers, reducing runtime further to 53.30 s.
+* **Instruction-Level Parallelism (ILP):** Unrolling the innermost $j$-loop by a factor of 4 allows the CPU superscalar execution engine to issue multiple independent memory store and floating-point addition operations per cycle. This mitigates control hazards, minimizes loop branch overhead, and yields the peak benchmark speedup of $3.60\times$ (39.42 s).
+* **Checksum Validation:** The checksum error between C1 (Naive) and C4 (Unrolled) is $0.0000\text{e}+00$ ($\text{Checksum} = 1.5839\text{e}+09$), confirming that aggressive loop transformations and instruction rescheduling preserved numerical precision and mathematical equivalence across all optimizations.
 
 
-* Capture terminal screenshots displaying compilation output, program execution results, and `perf` metrics.
-
+3. ** Capture terminal screenshots displaying compilation output, program execution results, and software profiling metrics using `valgrind --tool=cachegrind` (utilized as a virtualized fallback due to VirtualBox PMC hardware counter restrictions).**
