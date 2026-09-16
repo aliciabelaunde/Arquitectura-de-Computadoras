@@ -216,6 +216,3 @@ Here is the updated **Phase 4** section populated with your empirical benchmark 
 * **Register Retention:** Hoisting the scalar value $A[i][k]$ into a dedicated FPU register (`reg_a`) avoids repeated memory lookups across the innermost loop. Coupled with explicit pointer arithmetic (`ptr_c`, `ptr_b`), this keeps critical operands in high-speed CPU registers, reducing runtime further to 53.30 s.
 * **Instruction-Level Parallelism (ILP):** Unrolling the innermost $j$-loop by a factor of 4 allows the CPU superscalar execution engine to issue multiple independent memory store and floating-point addition operations per cycle. This mitigates control hazards, minimizes loop branch overhead, and yields the peak benchmark speedup of $3.60\times$ (39.42 s).
 * **Checksum Validation:** The checksum error between C1 (Naive) and C4 (Unrolled) is $0.0000\text{e}+00$ ($\text{Checksum} = 1.5839\text{e}+09$), confirming that aggressive loop transformations and instruction rescheduling preserved numerical precision and mathematical equivalence across all optimizations.
-
-
-3. **Capture terminal screenshots displaying compilation output, program execution results, and software profiling metrics using `valgrind --tool=cachegrind` (utilized as a virtualized fallback due to VirtualBox PMC hardware counter restrictions).**
