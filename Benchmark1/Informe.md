@@ -26,7 +26,7 @@ cat /sys/devices/system/cpu/cpu0/cache/index0/coherency_line_size
 
 Since the cache line size is 64 bytes and each single-precision float occupies 4 bytes, every transfer from main memory retrieves 16 consecutive numbers. Accessing data sequentially fully utilizes this transfer (resulting in 1 cache miss followed by 15 cache hits). Conversely, non-contiguous access patterns discard up to $93.75\%$ of the fetched data, severely degrading execution performance. 
 
-### Phase 2: Benchmark Code Implementation and Compilation
+## Phase 2: Benchmark Code Implementation and Compilation
 
 * Create the file `benchmark_arquitectura.c` in the Linux working directory and paste the complete source code provided in the guide.
 
@@ -156,7 +156,7 @@ int main(void) {
 gcc -Wall -Wextra -O1 benchmar_arquitectura.c -o benchmar_arquitectura -lm
 ```
 
-### Phase 3: Execution and Performance Profiling
+## Phase 3: Execution and Performance Profiling
 
 * Execute the compiled binary 
 
@@ -184,11 +184,37 @@ perf stat -e L1-dcache-loads,L1-dcache-load-misses,cycles,instructions ./benchma
 ```
 to evaluate L1 cache miss rates and Instructions Per Cycle (IPC).
 
+![alt text](image-5.png)
 
 
----
+This error occurs because Linux restricts unprivileged users from accessing hardware performance counters for security reasons (`perf_event_paranoid` is set to `4`).
 
-### Phase 4: Data Tabulation and Report Generation
+To resolve this and allow `perf` to read the CPU counters, run either of the following two options in your terminal:
+
+**Option 1: Run with `sudo` (Quickest)**
+Run the command with administrator privileges:
+
+```bash
+sudo perf stat -e L1-dcache-loads,L1-dcache-load-misses,cycles,instructions ./benchmark_arquitectura
+
+```
+
+**Option 2: Temporarily lower kernel security restrictions**
+Lower the security level to allow your user account to profile performance without needing `sudo` every time:
+
+```bash
+sudo sysctl -w kernel.perf_event_paranoid=-1
+
+```
+
+After running this command, re-run your original command:
+
+```bash
+perf stat -e L1-dcache-loads,L1-dcache-load-misses,cycles,instructions ./benchmark_arquitectura
+
+```
+
+## Phase 4: Data Tabulation and Report Generation
 
 * Populate the performance template using empirical data gathered during execution:
 
