@@ -1,12 +1,24 @@
 ### Phase 1: Environment Setup and Hardware Inspection
 
-* Open the Linux terminal (Ubuntu/WSL2) and run `lscpu | grep -E "L1|L2|L3|Model name"` to inspect the cache hierarchy of the processor.
+* Open the Linux terminal (Ubuntu/WSL2) and run 
+
+```
+lscpu | grep -E "L1|L2|L3|Model name"
+```
+
+ to inspect the cache hierarchy of the processor.
 
 
-* Verify the exact L1 data cache line size by running `getconf LEVEL1_DCACHE_LINESIZE`.
+* Verify the exact L1 data cache line size by running 
+```
+getconf LEVEL1_DCACHE_LINESIZE
+```
 
 
-* Confirm the coherence block size by checking the kernel sysfs via `cat /sys/devices/system/cpu/cpu0/cache/index0/coherency_line_size`.
+* Confirm the coherence block size by checking the kernel sysfs via
+```
+cat /sys/devices/system/cpu/cpu0/cache/index0/coherency_line_size
+```
 
 
 ---
