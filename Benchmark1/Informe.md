@@ -158,7 +158,9 @@ gcc -Wall -Wextra -O1 benchmar_arquitectura.c -o benchmar_arquitectura -lm
 
 ## Phase 3: Execution and Performance Profiling
 
-* Execute the compiled binary 
+1. **Execute the Compiled Benchmark**
+
+Run the compiled binary to generate basic execution time, GFLOPS, and Speedup metrics: 
 
 ```
 ./benchmar_arquitectura
@@ -167,50 +169,28 @@ to obtain execution times, GFLOPS, and Speedup metrics.
 
 ![alt text](image-3.png)
 
-
-* Install the `perf` profiling tool if not already present 
-```
-sudo apt-get install -y linux-tools-generic linux-tools-common
-```
-![alt text](image-4.png)
-
-```
-sudo apt-get update --fix-missing && sudo apt-get install -y linux-tools-generic linux-tools-common
-```
-
-* Profile hardware-level performance counters using 
-```
-perf stat -e L1-dcache-loads,L1-dcache-load-misses,cycles,instructions ./benchmar_arquitectura
-```
-to evaluate L1 cache miss rates and Instructions Per Cycle (IPC).
-
-![alt text](image-5.png)
-
-
-This error occurs because Linux restricts unprivileged users from accessing hardware performance counters for security reasons (`perf_event_paranoid` is set to `4`).
-
-To resolve this and allow `perf` to read the CPU counters, run either of the following two options in your terminal:
-
-**Option 1: Run with `sudo` (Quickest)**
-Run the command with administrator privileges:
-
-```bash
-sudo perf stat -e L1-dcache-loads,L1-dcache-load-misses,cycles,instructions ./benchmark_arquitectura
-
-```
-
-**Option 2: Temporarily lower kernel security restrictions**
-Lower the security level to allow your user account to profile performance without needing `sudo` every time:
+2. **Configure Kernel Security Permissions**
+If `perf` fails with a security restriction error (`perf_event_paranoid` set to `4`), lower the security restrictions temporarily to allow performance counter profiling:
 
 ```bash
 sudo sysctl -w kernel.perf_event_paranoid=-1
 
 ```
 
-After running this command, re-run your original command:
+3. **Profile Performance Counters**
+Run `perf stat` with administrative privileges to record L1 cache loads, cache misses, cycles, and total instructions:
 
 ```bash
-perf stat -e L1-dcache-loads,L1-dcache-load-misses,cycles,instructions ./benchmark_arquitectura
+sudo perf stat -e L1-dcache-loads,L1-dcache-load-misses,cycles,instructions ./benchmar_arquitectura
+
+```
+
+4. **Alternative Software Cache Profiling (VirtualBox Fallback)**
+If hardware counters display `<not supported>` due to virtual machine hypervisor limitations, run Valgrind Cachegrind to simulate cache misses in software:
+
+```bash
+sudo apt-get install -y valgrind
+valgrind --tool=cachegrind ./benchmar_arquitectura
 
 ```
 
