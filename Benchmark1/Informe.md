@@ -218,4 +218,4 @@ Here is the updated **Phase 4** section populated with your empirical benchmark 
 * **Checksum Validation:** The checksum error between C1 (Naive) and C4 (Unrolled) is $0.0000\text{e}+00$ ($\text{Checksum} = 1.5839\text{e}+09$), confirming that aggressive loop transformations and instruction rescheduling preserved numerical precision and mathematical equivalence across all optimizations.
 
 
-3. ** Capture terminal screenshots displaying compilation output, program execution results, and software profiling metrics using `valgrind --tool=cachegrind` (utilized as a virtualized fallback due to VirtualBox PMC hardware counter restrictions).**
+3. **Capture terminal screenshots displaying compilation output, program execution results, and software profiling metrics using `valgrind --tool=cachegrind` (utilized as a virtualized fallback due to VirtualBox PMC hardware counter restrictions).**
