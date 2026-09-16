@@ -165,12 +165,18 @@ gcc -Wall -Wextra -O1 benchmar_arquitectura.c -o benchmar_arquitectura -lm
 ```
 to obtain execution times, GFLOPS, and Speedup metrics.
 
+![alt text](image-3.png)
+
 
 * Install the `perf` profiling tool if not already present 
 ```
 sudo apt-get install -y linux-tools-generic linux-tools-common
 ```
+![alt text](image-4.png)
 
+```
+sudo apt-get update --fix-missing && sudo apt-get install -y linux-tools-generic linux-tools-common
+```
 
 * Profile hardware-level performance counters using 
 ```
