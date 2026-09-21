@@ -301,7 +301,7 @@ private:
     float *B;
     float *C1, *C2, *C3, *C4;
 
-    // High-precision monotonic timer
+    // Temporizador de alta precisión
     static double medirTiempoSegundos() {
         struct timespec ts;
         clock_gettime(CLOCK_MONOTONIC, &ts);
@@ -309,7 +309,7 @@ private:
     }
 
 public:
-    // Constructor: Allocates contiguous memory blocks for 1024x1024 matrices
+    // Constructor: Reserva bloques de memoria contigua en el Heap
     MatrizBenchmark(int tamano) : N(tamano) {
         size_t bytes = (size_t)N * N * sizeof(float);
         A  = (float*)malloc(bytes);
@@ -319,7 +319,7 @@ public:
         C3 = (float*)malloc(bytes);
         C4 = (float*)malloc(bytes);
 
-        // Matrix initialization
+        // Inicialización de matrices
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 A[i * N + j] = (float)((i + j) % 50) * 0.02f + 1.0f;
@@ -328,20 +328,20 @@ public:
         }
     }
 
-    // Destructor: Frees allocated contiguous memory
+    // Destructor: Libera la memoria contigua asignada
     ~MatrizBenchmark() {
         free(A); free(B);
         free(C1); free(C2); free(C3); free(C4);
     }
 
-    // Phase 1: Naive (i-j-k) - Causes massive Cache Misses on Matrix B
+    // Fase 1: Naive (i-j-k) - Genera fallos de caché masivos en B
     double ejecutarNaive() {
         double t0 = medirTiempoSegundos();
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 float suma = 0.0f;
                 for (int k = 0; k < N; k++) {
-                    suma += A[i * N + k] * B[k * N + j]; // 4096-byte stride in B
+                    suma += A[i * N + k] * B[k * N + j]; // Salto de N*4 bytes en B
                 }
                 C1[i * N + j] = suma;
             }
@@ -349,7 +349,7 @@ public:
         return medirTiempoSegundos() - t0;
     }
 
-    // Phase 2: Spatial Locality (i-k-j) - Leverages 64-Byte Cache Lines
+    // Fase 2: Localidad Espacial (i-k-j) - Aprovecha líneas de caché de 64 Bytes
     double ejecutarLocalidadEspacial() {
         for (int idx = 0; idx < N * N; idx++) C2[idx] = 0.0f;
         double t0 = medirTiempoSegundos();
@@ -359,21 +359,21 @@ public:
                 int fila_b = k * N;
                 int fila_c = i * N;
                 for (int j = 0; j < N; j++) {
-                    C2[fila_c + j] += r * B[fila_b + j]; // Contiguous access
+                    C2[fila_c + j] += r * B[fila_b + j]; // Acceso contiguo en memoria
                 }
             }
         }
         return medirTiempoSegundos() - t0;
     }
 
-    // Phase 3: Temporal Locality + CPU Registers - Pins operand in CPU FPU register
+    // Fase 3: Localidad Temporal + Registros - Mantiene el operando en registro FPU/SIMD
     double ejecutarRegistrosCPU() {
         for (int idx = 0; idx < N * N; idx++) C3[idx] = 0.0f;
         double t0 = medirTiempoSegundos();
         for (int i = 0; i < N; i++) {
             float *ptr_c = &C3[i * N];
             for (int k = 0; k < N; k++) {
-                register const float reg_a = A[i * N + k]; // Stored in FPU register
+                const float reg_a = A[i * N + k]; // Guardado en registro de CPU
                 const float *ptr_b = &B[k * N];
                 for (int j = 0; j < N; j++) {
                     ptr_c[j] += reg_a * ptr_b[j];
@@ -383,14 +383,14 @@ public:
         return medirTiempoSegundos() - t0;
     }
 
-    // Phase 4: Loop Unrolling 4x + ILP - Maximizes CPU pipeline execution
+    // Fase 4: Loop Unrolling 4x + ILP - Maximiza el pipeline del procesador
     double ejecutarLoopUnrolling() {
         for (int idx = 0; idx < N * N; idx++) C4[idx] = 0.0f;
         double t0 = medirTiempoSegundos();
         for (int i = 0; i < N; i++) {
             float *ptr_c = &C4[i * N];
             for (int k = 0; k < N; k++) {
-                register const float reg_a = A[i * N + k];
+                const float reg_a = A[i * N + k];
                 const float *ptr_b = &B[k * N];
                 for (int j = 0; j < N; j += 4) {
                     ptr_c[j]     += reg_a * ptr_b[j];
@@ -430,10 +430,10 @@ int main() {
 
     cout << fixed << setprecision(4);
     cout << "\n=== DETERMINISTIC BENCHMARK RESULTS (N=" << N << ") ===\n";
-    cout << "1. Naive (i-j-k)           : " << t_naive  << "s | " << (gflops / t_naive)  << " GFLOPS | Speedup: 1.00x\n";
-    cout << "2. Spatial Locality (Cache): " << t_cache  << "s | " << (gflops / t_cache)  << " GFLOPS | Speedup: " << (t_naive / t_cache) << "x\n";
-    cout << "3. CPU Registers           : " << t_reg    << "s | " << (gflops / t_reg)    << " GFLOPS | Speedup: " << (t_naive / t_reg) << "x\n";
-    cout << "4. Loop Unrolling 4x (ILP) : " << t_unroll << "s | " << (gflops / t_unroll) << " GFLOPS | Speedup: " << (t_naive / t_unroll) << "x\n";
+    cout << "1. Naive (i-j-k)           : " << t_naive   << "s | " << (gflops / t_naive)   << " GFLOPS | Speedup: 1.00x\n";
+    cout << "2. Spatial Locality (Cache): " << t_cache   << "s | " << (gflops / t_cache)   << " GFLOPS | Speedup: " << (t_naive / t_cache) << "x\n";
+    cout << "3. CPU Registers           : " << t_reg     << "s | " << (gflops / t_reg)     << " GFLOPS | Speedup: " << (t_naive / t_reg) << "x\n";
+    cout << "4. Loop Unrolling 4x (ILP) : " << t_unroll  << "s | " << (gflops / t_unroll)  << " GFLOPS | Speedup: " << (t_naive / t_unroll) << "x\n";
 
     bench.validarResultados();
 
@@ -450,12 +450,13 @@ lscpu | grep -E "L1 L2 L3|Model name"
 getconf LEVEL1_DCACHE_LINESIZE
 
 ```
-
+![alt text](image-10.png)
+![alt text](image-11.png)
 
 2. **Compilation using the forced `-O1` flag (to evaluate code design rather than compiler optimization):**
 
 ```bash
-g++ -Wall -Wextra -O1 benchmark_arquitectura.cpp -o benchmark_cpp
+g++ -Wall -Wextra -O1 new_code.cpp -o new_code_cpp
 
 ```
 
@@ -463,7 +464,7 @@ g++ -Wall -Wextra -O1 benchmark_arquitectura.cpp -o benchmark_cpp
 3. **Execution & Hardware Performance Counter Profiling:**
 
 ```bash
-perf stat -e L1-dcache-loads,L1-dcache-load-misses,cycles,instructions ./benchmark_cpp
+perf stat -e L1-dcache-loads,L1-dcache-load-misses,cycles,instructions ./new_code_cpp
 
 ```
 
