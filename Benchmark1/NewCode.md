@@ -464,23 +464,7 @@ g++ -Wall -Wextra -O1 new_code.cpp -o new_code_cpp
 3. **Execution & Hardware Performance Counter Profiling:**
 
 ```bash
-perf stat -e L1-dcache-loads,L1-dcache-load-misses,cycles,instructions ./new_code_cpp
+sudo perf stat -e L1-dcache-loads,L1-dcache-load-misses,cycles,instructions ./new_code_cpp
 
 ```
-
-## 4. Benchmark Results Metrics Table
-
-| Phase / Configuration | Measured Time (s) | Performance (GFLOPS) | Speedup ($S = T_{base}/T_{opt}$) | Cache Hit Rate |
-| --- | --- | --- | --- | --- |
-| **1. Naive (i-j-k)** | *T_naive* | *GFLOPS* | **1.00x (Base)**<br> | Low (< 15%)
-
- |
-| **2. Spatial Locality (i-k-j)** | *T_cache* | *GFLOPS* | **$T_{naive} / T_{cache}$** | High (> 90%)
-
- |
-| **3. CPU Registers** | *T_reg* | *GFLOPS* | **$T_{naive} / T_{reg}$** | Optimal
-
- |
-| **4. Loop Unrolling 4x (ILP)** | *T_unroll* | *GFLOPS* | **$T_{naive} / T_{unroll}$** | Maximum
-
- |
+![alt text](image-12.png)
