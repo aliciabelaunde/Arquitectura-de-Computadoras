@@ -79,6 +79,11 @@ gcc memory_allocation.c -o memory_allocation
 
 ```
 
+![alt text](image.png)
+
+![alt text](image-1.png)
+
+
 ## 3. Step-by-Step Documentation & Evidence Guide
 
 ### Process Steps:
