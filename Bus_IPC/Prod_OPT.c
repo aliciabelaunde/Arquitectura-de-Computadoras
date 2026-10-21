@@ -26,7 +26,10 @@ typedef struct {
 
 int main() {
     int shm_fd = shm_open(SHM_NAME, O_CREAT | O_RDWR, 0666);
-    ftruncate(shm_fd, sizeof(SharedBusBuffer));
+    if (ftruncate(shm_fd, sizeof(SharedBusBuffer)) == -1) {
+    perror("[Prod OPT] Error configuring shared memory size");
+    return 1;
+}
     
     SharedBusBuffer *shm = mmap(0, sizeof(SharedBusBuffer), PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, 0);
     
