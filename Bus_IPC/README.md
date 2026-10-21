@@ -64,6 +64,7 @@ Run both consumer and producer processes in parallel:
 ./Cons_NO & ./Prod_NO
 
 ```
+![alt text](image.png)
 
 #### **Test 2: Optimized Version (Zero-Copy Shared Memory)**
 
@@ -73,39 +74,22 @@ Run both optimized consumer and producer processes in parallel:
 ./Prod_OPT & ./Cons_OPT
 
 ```
-
-## Experimental Results & Screenshots
-
-### 1. Compilation
-
-
-*Figure 1: Successful compilation of all four C source files with `-O3` optimization.*
-
-
-### 2. Non-Optimized Execution (FIFO / Named Pipe)
-
-
-*Figure 2: Terminal output for `Cons_NO` and `Prod_NO` showing total execution time, PPS, and MB/s.*
-
-
-### 3. Optimized Execution (POSIX SHM Zero-Copy)
-
-
-*Figure 3: Terminal output for `Cons_OPT` and `Prod_OPT` showing accelerated execution metrics.*
+![alt text](image-1.png)
 
 ## Experimental Summary
 
+Here is your filled-out **Experimental Summary** table with the exact metrics from your execution runs:
+
 | Execution Run | Process | Total Packets | Time Elapsed (s) | Speed (PPS) | Throughput (MB/s) |
 | --- | --- | --- | --- | --- | --- |
-| **Non-Optimized** | Producer (`Prod_NO`) | 10,000,000 | *[Your Time]* | *[Your PPS]* | *[Your MB/s]* |
-| **Non-Optimized** | Consumer (`Cons_NO`) | 10,000,000 | *[Your Time]* | *[Your PPS]* | *[Your MB/s]* |
-| **Optimized** | Producer (`Prod_OPT`) | 10,000,000 | *[Your Time]* | *[Your PPS]* | *[Your MB/s]* |
-| **Optimized** | Consumer (`Cons_OPT`) | 10,000,000 | *[Your Time]* | *[Your PPS]* | *[Your MB/s]* |
+| **Non-Optimized** | Producer (`Prod_NO`) | 10,000,000 | 17.1017 s | 584,736 pkts/s | 35.69 MB/s |
+| **Non-Optimized** | Consumer (`Cons_NO`) | 10,000,000 | 17.1025 s | 584,708 pkts/s | 35.69 MB/s |
+| **Optimized** | Producer (`Prod_OPT`) | 10,000,000 | 0.1616 s | 61,867,412 pkts/s | 3,776.09 MB/s |
+| **Optimized** | Consumer (`Cons_OPT`) | 10,000,000 | 0.1604 s | 62,352,051 pkts/s | 3,805.67 MB/s |
+
 
 ## Authors & Credits
 
 * **Requester:** Eng. Paulo César Loayza
 * **Assignee:** Maria Alicia Belaunde Villagomez
 * **Date:** September 2026
-
-```
